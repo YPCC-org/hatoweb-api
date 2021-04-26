@@ -25,4 +25,5 @@ async def root(request: Request):
 
 @app.post("/class_ten")
 async def class_ten(data: class_ten_data):
+    print(data)
     return data
