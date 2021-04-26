@@ -6,7 +6,7 @@ app = FastAPI()
 
 
 class class_ten_data(BaseModel):
-    value: str
+    value: list
 
 
 @app.middleware("http")
