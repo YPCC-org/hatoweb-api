@@ -1,5 +1,5 @@
-import os
 import datetime
+import os
 
 from sqlalchemy import Column, DateTime, Integer, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -51,7 +51,7 @@ def reset_class_ten():
     result = session.query(Class_Ten).all()
     for row in result:
         row.status = 3
-        row.comment = ''
+        row.comment = ""
         row.updated_at = now
     session.commit()
     return 0

@@ -1,9 +1,11 @@
-from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import Response
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import os
 import datetime
+import os
+
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
+from pydantic import BaseModel
+
 import mydb
 
 app = FastAPI()
