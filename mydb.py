@@ -21,9 +21,12 @@ Session = sessionmaker(bind=ENGINE)
 session = Session()
 
 
-def get_class_ten(class_name):
-    x = session.query(Class_Ten).get(class_name)
-    return x.status, x.comment, x.updated_at
+def get_class_ten():
+    resdict = {}
+    result = session.query(Class_Ten).all()
+    for row in result:
+        resdict[row.class_name] = [row.status, row.comment, row.updated_at]
+    return resdict
 
 
 def update_class_ten(class_name, status, comment, delete, updated_at):
