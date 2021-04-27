@@ -37,7 +37,7 @@ async def root(request: Request):
     return {"message": "hello, world"}
 
 
-@app.get("class_ten")
+@app.get("/class_ten")
 async def get_class_ten(request: Request):
     return mydb.get_class_ten()
 
