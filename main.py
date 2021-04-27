@@ -2,6 +2,8 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel
 import os
+import datetime
+import mydb
 
 app = FastAPI()
 
@@ -29,5 +31,16 @@ async def root(request: Request):
 async def class_ten(data: class_ten_data):
     if data.access_token != os.getenv("API_AT"):
         raise HTTPException(status_code=403)
-    print(data.value)
+    class_name = data.value[1][1] + data.value[2][0]
+    status = data.value[3]
+    updated_at = datetime.datetime.now()
+    if data.value[4] == '変更しない':
+        mydb.update_class_ten(class_name, status, '', False, updated_at)
+    elif data.value[4] == '削除する':
+        mydb.update_class_ten(class_name, status, '', True, updated_at)
+    elif data.value[4] == '更新する':
+        comment = data.value[5]
+        mydb.update_class_ten(class_name, status, comment, False, updated_at)
+    else:
+        raise HTTPException()
     return 0
