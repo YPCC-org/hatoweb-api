@@ -25,7 +25,11 @@ def get_class_ten():
     resdict = {}
     result = session.query(Class_Ten).all()
     for row in result:
-        resdict[row.class_name] = [row.status, row.comment, row.updated_at]
+        resdict[row.class_name] = {
+            "status": row.status,
+            "comment": row.comment,
+            "updated_at": row.updated_at
+        }
     return resdict
 
 
