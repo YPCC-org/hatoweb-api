@@ -59,5 +59,5 @@ async def post_class_ten(data: class_ten_data):
         comment = data.value[5]
         mydb.update_class_ten(class_name, status, comment, False, updated_at)
     else:
-        raise HTTPException()
+        raise HTTPException(status_code=400)
     return 0
