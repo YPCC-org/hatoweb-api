@@ -1,18 +1,33 @@
 import datetime
 import os
+from urllib.parse import urlparse
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import (
+    HTMLResponse,
+    RedirectResponse,
+    Response,
+)
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
 from pydantic import BaseModel
 
 import mydb
 
 app = FastAPI()
 
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 class class_ten_data(BaseModel):
     value: list
+    access_token: str
+
+
+class notif_data(BaseModel):
+    value: str
     access_token: str
 
 
@@ -26,9 +41,14 @@ app.add_middleware(
 
 
 @app.middleware("http")
-async def head(request: Request, call_next):
+async def middleware(request: Request, call_next):
     if request.method == "HEAD":
-        response = Response()
+        return Response()
+    elif "herokuapp" in urlparse(str(request.url)).netloc:
+        domain = os.getenv("DOMAIN")
+        if domain:
+            url = urlparse(str(request.url))._replace(netloc=domain).geturl()
+            response = RedirectResponse(url)
     else:
         response = await call_next(request)
     return response
@@ -37,6 +57,11 @@ async def head(request: Request, call_next):
 @app.get("/")
 async def root(request: Request):
     return {"message": "hello, world"}
+
+
+@app.get("/notif", response_class=HTMLResponse)
+async def get_notif(request: Request):
+    return mydb.get_notif()
 
 
 @app.get("/class_ten")
@@ -60,4 +85,12 @@ async def post_class_ten(data: class_ten_data):
         mydb.update_class_ten(class_name, status, comment, False, updated_at)
     else:
         raise HTTPException(status_code=400)
+    return 0
+
+
+@app.post("/notif")
+async def post_notif(data: notif_data):
+    if data.access_token != os.getenv("API_AT"):
+        raise HTTPException(status_code=403)
+    mydb.add_notif(data.value)
     return 0

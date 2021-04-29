@@ -18,6 +18,13 @@ class Class_Ten(Base):
     updated_at = Column(DateTime)
 
 
+class Notif(Base):
+    __tablename__ = "notif"
+    id = Column(Integer, primary_key=True)
+    value = Column(Text)
+    updated_at = Column(DateTime)
+
+
 Session = sessionmaker(bind=ENGINE)
 session = Session()
 
@@ -42,6 +49,24 @@ def update_class_ten(class_name, status, comment, delete, updated_at):
     elif comment:
         x.comment = comment
     x.updated_at = updated_at
+    session.commit()
+    return 0
+
+
+def get_notif():
+    resdict = {}
+    result = session.query(Notif).all()
+    for row in result:
+        resdict[row.id] = {
+            "value": row.value,
+            "updated_at": row.updated_at,
+        }
+    return resdict
+
+
+def add_notif(value):
+    ncolmn = Notif(value=value)
+    session.add(ncolmn)
     session.commit()
     return 0
 
