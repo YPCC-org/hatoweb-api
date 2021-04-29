@@ -64,7 +64,7 @@ def get_notif():
     return resdict
 
 
-def add_notif(value):
+def add_notif(value, created_at):
     id = session.query(Notif).count()
     ncolmn = Notif(id=id, value=value)
     session.add(ncolmn)

@@ -87,5 +87,6 @@ async def post_class_ten(data: class_ten_data):
 async def post_notif(data: notif_data):
     if data.access_token != os.getenv("API_AT"):
         raise HTTPException(status_code=403)
-    mydb.add_notif(data.value)
+    updated_at = datetime.datetime.now()
+    mydb.add_notif(data.value, updated_at)
     return 0
