@@ -66,7 +66,7 @@ def get_notif():
 
 def add_notif(value, created_at):
     id = session.query(Notif).count()
-    ncolmn = Notif(id=id, value=value)
+    ncolmn = Notif(id=id, value=value, created_at=created_at)
     session.add(ncolmn)
     session.commit()
     return 0
