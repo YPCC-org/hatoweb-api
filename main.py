@@ -54,7 +54,7 @@ async def root(request: Request):
     return {"message": "hello, world"}
 
 
-@app.get("/notif", response_class=HTMLResponse)
+@app.get("/notif")
 async def get_notif(request: Request):
     return mydb.get_notif()
 
