@@ -44,8 +44,8 @@ async def middleware(request: Request, call_next):
         if domain:
             url = urlparse(str(request.url))._replace(netloc=domain).geturl()
             response = RedirectResponse(url)
-    else:
-        response = await call_next(request)
+        else:
+            response = await call_next(request)
     return response
 
 
