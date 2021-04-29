@@ -4,7 +4,6 @@ from urllib.parse import urlparse
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import (
-    HTMLResponse,
     RedirectResponse,
     Response,
 )
@@ -22,6 +21,7 @@ class class_ten_data(BaseModel):
 
 
 class notif_data(BaseModel):
+    title: str
     value: str
     access_token: str
 
