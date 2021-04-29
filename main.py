@@ -38,7 +38,7 @@ app.add_middleware(
 @app.middleware("http")
 async def middleware(request: Request, call_next):
     if request.method == "HEAD":
-        return Response()
+        response = Response()
     elif "herokuapp" in urlparse(str(request.url)).netloc:
         domain = os.getenv("DOMAIN")
         if domain:
@@ -46,6 +46,8 @@ async def middleware(request: Request, call_next):
             response = RedirectResponse(url)
         else:
             response = await call_next(request)
+    else:
+        response = await call_next(request)
     return response
 
 
