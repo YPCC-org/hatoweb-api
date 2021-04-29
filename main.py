@@ -61,6 +61,15 @@ async def get_notif(request: Request):
     return mydb.get_notif()
 
 
+@app.post("/notif")
+async def post_notif(data: notif_data):
+    if data.access_token != os.getenv("API_AT"):
+        raise HTTPException(status_code=403)
+    updated_at = datetime.datetime.now()
+    mydb.add_notif(data.title, data.value, updated_at)
+    return 0
+
+
 @app.get("/class_ten")
 async def get_class_ten(request: Request):
     return mydb.get_class_ten()
@@ -82,13 +91,4 @@ async def post_class_ten(data: class_ten_data):
         mydb.update_class_ten(class_name, status, comment, False, updated_at)
     else:
         raise HTTPException(status_code=400)
-    return 0
-
-
-@app.post("/notif")
-async def post_notif(data: notif_data):
-    if data.access_token != os.getenv("API_AT"):
-        raise HTTPException(status_code=403)
-    updated_at = datetime.datetime.now()
-    mydb.add_notif(data.value, updated_at)
     return 0

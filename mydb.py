@@ -21,6 +21,7 @@ class Class_Ten(Base):
 class Notif(Base):
     __tablename__ = "notif"
     id = Column(Integer, primary_key=True)
+    title = Column(Text)
     value = Column(Text)
     updated_at = Column(DateTime)
 
@@ -58,15 +59,16 @@ def get_notif():
     result = session.query(Notif).all()
     for row in result:
         resdict[row.id] = {
+            "title": row.title,
             "value": row.value,
             "updated_at": row.updated_at,
         }
     return resdict
 
 
-def add_notif(value, updated_at):
+def add_notif(title, value, updated_at):
     id = session.query(Notif).count()
-    ncolmn = Notif(id=id, value=value, updated_at=updated_at)
+    ncolmn = Notif(id=id, title=title, value=value, updated_at=updated_at)
     session.add(ncolmn)
     session.commit()
     return 0
