@@ -57,8 +57,9 @@ def update_class_ten(class_name, status, comment, delete, updated_at):
 def get_notif():
     resdict = {}
     result = session.query(Notif).all()
+    count = session.query(Notif).count() - 1
     for row in result:
-        resdict[row.id] = {
+        resdict[count - row.id] = {
             "title": row.title,
             "value": row.value,
             "updated_at": row.updated_at,
