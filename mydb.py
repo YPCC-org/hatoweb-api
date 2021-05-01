@@ -86,6 +86,12 @@ def reset_class_ten():
     return 0
 
 
+def reset_notif():
+    session.query(Notif).delete()
+    session.commit()
+    return 0
+
+
 if __name__ == "__main__":
     status, comment, updated_at = get_class_ten("21")
     print(status, comment, updated_at)
