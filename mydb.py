@@ -142,6 +142,8 @@ def reset_class_ten():
         Base.metadata.tables["class_ten"].create(bind=ENGINE)
     else:
         session.query(Class_Ten).delete()
+    session.commit()
+    session.close()
     fix_class_ten()
     return 0
 
