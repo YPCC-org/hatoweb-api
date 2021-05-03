@@ -82,8 +82,10 @@ def fix_class_ten():
 
 
 def get_class_ten():
-    if not inspect(ENGINE).has_table("class_ten"):
+    try:
         Base.metadata.tables["class_ten"].create(bind=ENGINE)
+    except Exception:
+        pass
     fix_class_ten()
     resdict = {}
     result = session.query(Class_Ten).all()
@@ -98,8 +100,10 @@ def get_class_ten():
 
 
 def update_class_ten(class_name, status, comment, delete, timestamp):
-    if not inspect(ENGINE).has_table("class_ten"):
+    try:
         Base.metadata.tables["class_ten"].create(bind=ENGINE)
+    except Exception:
+        pass
     fix_class_ten()
     x = session.query(Class_Ten).get(class_name)
     x.status = status
@@ -138,10 +142,11 @@ def add_info(title, value, updated_at):
 
 
 def reset_class_ten():
-    if not inspect(ENGINE).has_table("class_ten"):
+    try:
         Base.metadata.tables["class_ten"].create(bind=ENGINE)
-    else:
-        session.query(Class_Ten).delete()
+    except Exception:
+        pass
+    session.query(Class_Ten).delete()
     session.commit()
     session.close()
     fix_class_ten()
@@ -149,8 +154,10 @@ def reset_class_ten():
 
 
 def reset_info():
-    if not inspect(ENGINE).has_table("info"):
+    try:
         Base.metadata.tables["info"].create(bind=ENGINE)
+    except Exception:
+        pass
     session.query(Info).delete()
     session.commit()
     session.close()
