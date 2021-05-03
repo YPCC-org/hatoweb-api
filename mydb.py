@@ -74,7 +74,6 @@ def fix_class_ten():
             row["status"] = 5
             row["comment"] = ""
             row["status_updated"] = timestamp
-            row["comment_updated"] = timestamp
             insert_list.append(row)
         session.execute(Class_Ten.__table__.insert(), insert_list)
         session.commit()
@@ -88,8 +87,9 @@ def get_class_ten():
         resdict[row.class_name] = {
             "status": row.status,
             "comment": row.comment,
-            "status_updated": row.status_updated,
-            "comment_updated": row.comment_updated,
+            # "status_updated": row.status_updated,
+            # "comment_updated": row.comment_updated,
+            "updated_at": row.comment_updated
         }
     return resdict
 
