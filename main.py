@@ -20,7 +20,7 @@ class class_ten_data(BaseModel):
     access_token: str
 
 
-class notif_data(BaseModel):
+class info_data(BaseModel):
     title: str
     value: str
     access_token: str
@@ -56,17 +56,17 @@ async def root(request: Request):
     return {"message": "hello, world"}
 
 
-@app.get("/notif")
-async def get_notif(request: Request):
-    return mydb.get_notif()
+@app.get("/info")
+async def get_info(request: Request):
+    return mydb.get_info()
 
 
-@app.post("/notif")
-async def post_notif(data: notif_data):
+@app.post("/info")
+async def post_info(data: info_data):
     if data.access_token != os.getenv("API_AT"):
         raise HTTPException(status_code=403)
     updated_at = datetime.datetime.now()
-    mydb.add_notif(data.title, data.value, updated_at)
+    mydb.add_info(data.title, data.value, updated_at)
     return 0
 
 
@@ -81,14 +81,14 @@ async def post_class_ten(data: class_ten_data):
         raise HTTPException(status_code=403)
     class_name = data.value[1][1] + data.value[2][0]
     status = data.value[3]
-    updated_at = datetime.datetime.now()
+    timestamp = datetime.datetime.now()
     if data.value[4] == "変更しない":
-        mydb.update_class_ten(class_name, status, "", False, updated_at)
+        mydb.update_class_ten(class_name, status, "", False, timestamp)
     elif data.value[4] == "削除する":
-        mydb.update_class_ten(class_name, status, "", True, updated_at)
+        mydb.update_class_ten(class_name, status, "", True, timestamp)
     elif data.value[4] == "更新する":
         comment = data.value[5]
-        mydb.update_class_ten(class_name, status, comment, False, updated_at)
+        mydb.update_class_ten(class_name, status, comment, False, timestamp)
     else:
         raise HTTPException(status_code=400)
     return 0

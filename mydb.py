@@ -15,11 +15,12 @@ class Class_Ten(Base):
     class_name = Column(Text, primary_key=True)
     status = Column(Integer)
     comment = Column(Text)
-    updated_at = Column(DateTime)
+    status_updated = Column(DateTime)
+    comment_updated = Column(DateTime)
 
 
-class Notif(Base):
-    __tablename__ = "notif"
+class Info(Base):
+    __tablename__ = "info"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
     value = Column(Text)
@@ -37,27 +38,31 @@ def get_class_ten():
         resdict[row.class_name] = {
             "status": row.status,
             "comment": row.comment,
-            "updated_at": row.updated_at,
+            "status_updated": row.status_updated,
+            "comment_updated": row.comment_updated,
         }
     return resdict
 
 
-def update_class_ten(class_name, status, comment, delete, updated_at):
+def update_class_ten(class_name, status, comment, delete, timestamp):
     x = session.query(Class_Ten).get(class_name)
     x.status = status
     if delete:
         x.comment = ""
+        x.comment_updated = timestamp
     elif comment:
         x.comment = comment
-    x.updated_at = updated_at
+        x.comment_updated = timestamp
+    x.status_updated = timestamp
     session.commit()
+    session.close()
     return 0
 
 
-def get_notif():
+def get_info():
     resdict = {}
-    result = session.query(Notif).all()
-    count = session.query(Notif).count() - 1
+    result = session.query(Info).all()
+    count = session.query(Info).count() - 1
     for row in result:
         resdict[count - row.id] = {
             "title": row.title,
@@ -67,11 +72,12 @@ def get_notif():
     return resdict
 
 
-def add_notif(title, value, updated_at):
-    id = session.query(Notif).count()
-    ncolmn = Notif(id=id, title=title, value=value, updated_at=updated_at)
+def add_info(title, value, updated_at):
+    id = session.query(Info).count()
+    ncolmn = Info(id=id, title=title, value=value, updated_at=updated_at)
     session.add(ncolmn)
     session.commit()
+    session.close()
     return 0
 
 
@@ -81,17 +87,19 @@ def reset_class_ten():
     for row in result:
         row.status = 3
         row.comment = ""
-        row.updated_at = now
+        row.status_updated = now
+        row.comment_updated = now
     session.commit()
+    session.close()
     return 0
 
 
-def reset_notif():
-    session.query(Notif).delete()
-    session.commit()
+def reset_info():
+    session.query(Info).delete()
+    session.close()
+    session.close()
     return 0
 
 
 if __name__ == "__main__":
-    status, comment, updated_at = get_class_ten("21")
-    print(status, comment, updated_at)
+    print(get_class_ten(), get_info())
