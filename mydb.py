@@ -120,6 +120,10 @@ def update_class_ten(class_name, status, comment, delete, timestamp):
 
 
 def get_info():
+    try:
+        Base.metadata.tables["info"].create(bind=ENGINE)
+    except Exception:
+        pass
     resdict = {}
     result = session.query(Info).all()
     count = session.query(Info).count() - 1
@@ -133,6 +137,10 @@ def get_info():
 
 
 def add_info(title, value, updated_at):
+    try:
+        Base.metadata.tables["info"].create(bind=ENGINE)
+    except Exception:
+        pass
     id = session.query(Info).count()
     ncolmn = Info(id=id, title=title, value=value, updated_at=updated_at)
     session.add(ncolmn)
