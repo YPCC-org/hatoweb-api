@@ -71,7 +71,7 @@ def fix_class_ten():
         for class_name in class_names:
             row = dict()
             row["class_name"] = class_name
-            row["status"] = 5
+            row["status"] = 3
             row["comment"] = ""
             row["status_updated"] = timestamp
             insert_list.append(row)
